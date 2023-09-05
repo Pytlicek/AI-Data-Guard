@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="AI DataGuard">
+    <meta name="author" content="AI DataGuard">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+{% block body %}
+    General Base Template<br>
+
+    {% block content %}{% endblock %}
+
+{% endblock %}
+</body>
+</html>
