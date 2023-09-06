@@ -32,3 +32,25 @@ def get_search(request, search_query: str):
         "search_metadata": example_variable_from_env,
     }
     return search_result
+
+from checkers.robots_checker import check_robots_domain
+
+@api.get(
+    "/check/robots/by_domain_name",
+    response=schemas.CheckRobotsResult,
+    tags=["check"],
+)
+def get_check_robots_by_domain_name(request, domain_name: str):
+    """
+    **Search for text**
+    <br><br>
+    **Try fe.** `amazon.com`
+    """
+    check_domain = check_robots_domain(domain_name)
+    print("check_domain:", check_domain)
+    check_result = {
+        "domain_name": domain_name,
+        "gptbot_is_allowed": check_domain["gptbot_is_allowed"],
+        "gptbot_definition_explicit": check_domain["gptbot_definition_explicit"]
+    }
+    return check_result

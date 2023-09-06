@@ -6,3 +6,9 @@ class SearchResult(Schema):
     search_query: str
     search_response: Optional[str]
     search_metadata: Optional[str]
+
+
+class CheckRobotsResult(Schema):
+    domain_name: str
+    gptbot_is_allowed: bool
+    gptbot_definition_explicit: bool
