@@ -33,7 +33,9 @@ def get_search(request, search_query: str):
     }
     return search_result
 
-from checkers.robots_checker import check_robots_domain
+
+from checkers.robots_checker import check_robots_domain, check_robots_url
+
 
 @api.get(
     "/check/robots/by_domain_name",
@@ -51,6 +53,33 @@ def get_check_robots_by_domain_name(request, domain_name: str):
     check_result = {
         "domain_name": domain_name,
         "gptbot_is_allowed": check_domain["gptbot_is_allowed"],
-        "gptbot_definition_explicit": check_domain["gptbot_definition_explicit"]
+        "gptbot_definition_explicit": check_domain[
+            "gptbot_definition_explicit"]
     }
     return check_result
+
+
+@api.get(
+    "/check/robots/by_url",
+    response={200: schemas.CheckRobotsResultURL, 400: schemas.ErrorSchema},
+    tags=["check"],
+)
+def get_check_robots_by_url(request, url: str):
+    """
+    **Search for text**
+    <br><br>
+    **Try fe.** `https://amazon.com/`
+    """
+    try:
+        check_domain = check_robots_url(url)
+        print("check_domain:", check_domain)
+        check_result = {
+            "url": url,
+            "domain_name": check_domain["domain_name"],
+            "gptbot_is_allowed": check_domain["gptbot_is_allowed"],
+            "gptbot_definition_explicit": check_domain[
+                "gptbot_definition_explicit"]
+        }
+        return 200, check_result
+    except Exception as e:
+        return 400, schemas.ErrorSchema(error=str(e))

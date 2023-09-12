@@ -12,3 +12,14 @@ class CheckRobotsResult(Schema):
     domain_name: str
     gptbot_is_allowed: bool
     gptbot_definition_explicit: bool
+
+
+class CheckRobotsResultURL(Schema):
+    domain_name: str
+    url: str
+    gptbot_is_allowed: bool
+    gptbot_definition_explicit: bool
+
+
+class ErrorSchema(Schema):
+    error: str

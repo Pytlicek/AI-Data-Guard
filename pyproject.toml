@@ -12,6 +12,7 @@ django = "^4.2.4"
 black = "^23.7.0"
 django-ninja = "^0.22.2"
 django-environ = "^0.10.0"
+tldextract = "^3.5.0"
 
 
 [build-system]
