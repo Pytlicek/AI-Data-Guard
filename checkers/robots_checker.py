@@ -59,41 +59,43 @@ def get_domain_name_from_url(url: str, get_tld: bool = False) -> str:
 def check_robots_by_url(
         domain_name: str,
         url: str,
-        useragent: str = None
+        user_agent: str = None
 ) -> dict:
-    # socket.setdefaulttimeout(timeout_seconds)
-    useragent = useragent or "gptbot"
+    user_agent = user_agent or "gptbot"
     robots_url = f'https://{domain_name}/robots.txt'  # Use HTTPS
-    print("Checking Domain:", domain_name, robots_url)
+    # print("Checking Domain:", domain_name, robots_url, "agent:", user_agent)
 
     robot_parser = TimeoutRobotFileParser()
     robot_parser.set_url(robots_url)
     robot_parser.read()
 
-    robot_parser_response = robot_parser.can_fetch(useragent, url)
+    robot_parser_response = robot_parser.can_fetch(user_agent, url)
 
     check_response = {
         'gptbot_is_allowed': robot_parser_response,
         'gptbot_definition_explicit': False
     }
 
-    for domain in robot_parser.entries:
-        if 'GPTBot' in domain.useragents:
-            check_response['gptbot_definition_explicit'] = True
-            print('GPTBot Rules:')
-            for rule in domain.rulelines:
-                print("rule:", rule)
+    for entry in robot_parser.entries:
+        for agent in entry.useragents:
+            if user_agent.lower() == str(agent).lower():
+                check_response['gptbot_definition_explicit'] = True
+                # print(f'{user_agent} Rules:')
+                for rule in entry.rulelines:
+                    print("rule:", rule)
 
     return check_response
 
 
-def check_robots_domain(domain_name: str) -> dict:
-    check_response = check_robots_by_url(domain_name, url="/")
+def check_robots_domain(domain_name: str, user_agent: str) -> dict:
+    check_response = check_robots_by_url(domain_name=domain_name, url="/",
+                                         user_agent=user_agent)
     return check_response
 
 
-def check_robots_url(url: str) -> dict:
+def check_robots_url(url: str, user_agent: str) -> dict:
     domain_name = get_domain_name_from_url(url)
-    check_response = check_robots_by_url(domain_name=domain_name, url=url)
+    check_response = check_robots_by_url(domain_name=domain_name, url=url,
+                                         user_agent=user_agent)
     check_response['domain_name'] = domain_name
     return check_response

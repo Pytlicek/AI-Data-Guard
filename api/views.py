@@ -15,24 +15,27 @@ def hello(request):
 
 @api.get(
     "/check/robots/by_domain_name",
-    response=schemas.CheckRobotsResult,
+    response={200: schemas.CheckRobotsResult, 400: schemas.ErrorSchema},
     tags=["check"],
 )
-def get_check_robots_by_domain_name(request, domain_name: str):
+def get_check_robots_by_domain_name(request, domain_name: str, user_agent: str = None):
     """
     **Endpoint to check robots.txt rules for a given Domain name**
     <br><br>
     **Try fe.** `amazon.com`
     """
-    check_domain = check_robots_domain(domain_name)
-    print("check_domain:", check_domain)
-    check_result = {
-        "domain_name": domain_name,
-        "gptbot_is_allowed": check_domain["gptbot_is_allowed"],
-        "gptbot_definition_explicit": check_domain[
-            "gptbot_definition_explicit"]
-    }
-    return check_result
+    try:
+        check_domain = check_robots_domain(domain_name, user_agent)
+        print("check_domain:", check_domain, "user_agent:", user_agent)
+        check_result = {
+            "domain_name": domain_name,
+            "gptbot_is_allowed": check_domain["gptbot_is_allowed"],
+            "gptbot_definition_explicit": check_domain[
+                "gptbot_definition_explicit"]
+        }
+        return check_result
+    except Exception as e:
+        return 400, schemas.ErrorSchema(error=str(e))
 
 
 @api.get(
@@ -40,15 +43,15 @@ def get_check_robots_by_domain_name(request, domain_name: str):
     response={200: schemas.CheckRobotsResultURL, 400: schemas.ErrorSchema},
     tags=["check"],
 )
-def get_check_robots_by_url(request, url: str):
+def get_check_robots_by_url(request, url: str, user_agent: str = None):
     """
     **Endpoint to check robots.txt rules for a given URL.**
     <br><br>
     **Try fe.** `https://amazon.com/`
     """
     try:
-        check_domain = check_robots_url(url)
-        print("check_domain:", check_domain)
+        check_domain = check_robots_url(url, user_agent=user_agent)
+        print("url:", url, "user_agent:", user_agent)
         check_result = {
             "url": url,
             "domain_name": check_domain["domain_name"],
