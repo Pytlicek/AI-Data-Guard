@@ -1,0 +1,13 @@
+[Unit]
+Description=gunicorn dataguard daemon
+After=network.target
+
+[Service]
+User=www
+Group=www
+Environment=DJANGO_ENV=dev
+WorkingDirectory=/opt/dataguard
+ExecStart=/opt/dataguard/.venv/bin/gunicorn --name dataguard --workers 10 --timeout 200 --bind 127.0.0.1:9113 --log-file /var/log/gunicorn/dataguard_app.log --log-level debug --capture-output dataguard.wsgi
+
+[Install]
+WantedBy=multi-user.target
