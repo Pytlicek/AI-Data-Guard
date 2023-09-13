@@ -1,10 +1,10 @@
-from urllib.request import urlopen
-import urllib.robotparser
-import urllib.request
-import tldextract
-import robots
 import socket
 import ssl
+import urllib.request
+import urllib.robotparser
+from urllib.request import urlopen
+
+import tldextract
 
 # Create an SSL context that doesn't verify the certificate
 ssl_context = ssl._create_unverified_context()
