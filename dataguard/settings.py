@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "api.localhost",
+    "dataguard.hostbeat.info",
 ]
 CSRF_TRUSTED_ORIGINS = ["https://*.hostbeat.info", "https://*.127.0.0.1"]
 

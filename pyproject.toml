@@ -13,6 +13,7 @@ black = "^23.7.0"
 django-ninja = "^0.22.2"
 django-environ = "^0.10.0"
 tldextract = "^3.5.0"
+gunicorn = "^21.2.0"
 
 
 [build-system]

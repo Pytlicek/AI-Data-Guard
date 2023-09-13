@@ -23,5 +23,5 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("admin/", admin.site.urls),
     path("dashboard/", include("dashboard.urls")),
-    path("", lambda request: redirect("dashboard/", permanent=False)),
+    path("", lambda request: redirect("api/", permanent=False)),
 ]
